@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Forum | Femboy Media Corporation</title>
 <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function(){ emailjs.init("YOUR_EMAILJS_USER_ID"); })(); // Replace with your EmailJS user ID
+</script>
 <style>
 body { font-family: 'Comfortaa', cursive; background: #f8f0ff; color: #333; margin:0; padding:0; }
 header { background: #fcd9f0; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
@@ -28,13 +32,14 @@ form button:hover { background: #ff6fcf; }
 .post p { margin-bottom: 10px; }
 .post .poster-name { font-weight: bold; color: #ff6fcf; margin-bottom:5px; }
 .post .post-date { font-size: 0.8em; color: #666; margin-left: 10px; }
+.report-badge { position: absolute; top: 10px; left: 10px; background: #ff6fcf; color: #fff; padding: 3px 8px; border-radius: 12px; font-size:0.8em; }
 
 .comment-section { margin-top: 10px; }
 .comment { background: #fce4fa; padding: 10px; margin-bottom: 10px; border-radius: 10px; }
 .comment .commenter-name { font-weight: bold; color: #6b1cb1; margin-right:5px; }
 
-.report-btn { position: absolute; top: 10px; right: 10px; background: #ff6fcf; color: #fff; border: none; padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; }
-.report-btn:hover { background: #6b1cb1; }
+.report-btn, .appeal-btn { position: absolute; top: 10px; right: 10px; background: #6b1cb1; color: #fff; border: none; padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; margin-left:5px;}
+.report-btn:hover, .appeal-btn:hover { background: #ff6fcf; }
 
 .btn { display: inline-block; margin-top: 20px; padding: 10px 25px; background: #ff6fcf; color:#fff; border-radius:50px; text-decoration:none; font-weight:bold; transition:0.3s; }
 .btn:hover { background: #6b1cb1; }
@@ -70,9 +75,7 @@ footer p { margin-top: 20px; font-size: 0.9em; color: #333; }
     <button type="submit">Post Idea</button>
   </form>
 
-  <div id="postsContainer">
-    <!-- Posts will appear here -->
-  </div>
+  <div id="postsContainer"></div>
 
   <a href="index.html" class="btn">Back to Home</a>
 </section>
@@ -86,31 +89,50 @@ footer p { margin-top: 20px; font-size: 0.9em; color: #333; }
 </footer>
 
 <script>
-// Load posts from localStorage
+// Load posts
 let posts = JSON.parse(localStorage.getItem('femboyPosts')) || [];
 
-function savePosts() {
-  localStorage.setItem('femboyPosts', JSON.stringify(posts));
+// Save posts
+function savePosts() { localStorage.setItem('femboyPosts', JSON.stringify(posts)); }
+
+// Auto-delete posts reported >3 days
+function cleanupReportedPosts() {
+  const now = new Date();
+  posts = posts.filter(p => {
+    if(p.reported && p.dateReported) {
+      const diff = (now - new Date(p.dateReported))/(1000*60*60*24);
+      return diff < 3;
+    }
+    return true;
+  });
+  savePosts();
 }
 
+// Render posts
 function renderPosts() {
+  cleanupReportedPosts();
   const container = document.getElementById('postsContainer');
   container.innerHTML = '';
   posts.forEach((post, postIndex) => {
     const postDiv = document.createElement('div');
     postDiv.className = 'post';
     const date = new Date(post.date).toLocaleString();
-    postDiv.innerHTML = `
-      <div><span class="poster-name">${post.name || 'Anonymous'} says:</span><span class="post-date">${date}</span></div>
-      <h3>${post.title}</h3>
-      <p>${post.content}</p>
-      <button class="report-btn">Report</button>
-      <div class="comment-section">
+    let commentsHtml = '';
+    if(!post.reported) {
+      commentsHtml = `
         ${post.comments.map(c => `<div class="comment"><span class="commenter-name">${c.name || 'Anonymous'}:</span>${c.text}</div>`).join('')}
         <input type="text" class="comment-name" placeholder="Your name">
         <input type="text" class="comment-input" placeholder="Add a comment...">
         <button class="comment-btn">Comment</button>
-      </div>
+      `;
+    }
+    postDiv.innerHTML = `
+      ${post.reported ? '<span class="report-badge">Reported</span>' : ''}
+      <div><span class="poster-name">${post.name || 'Anonymous'} says:</span><span class="post-date">${date}</span></div>
+      <h3>${post.title}</h3>
+      <p>${post.content}</p>
+      ${post.reported ? '<button class="appeal-btn">Request Appeal</button>' : '<button class="report-btn">Report</button>'}
+      <div class="comment-section">${commentsHtml}</div>
     `;
     container.appendChild(postDiv);
 
@@ -118,37 +140,56 @@ function renderPosts() {
     const commentInput = postDiv.querySelector('.comment-input');
     const commentName = postDiv.querySelector('.comment-name');
     const reportBtn = postDiv.querySelector('.report-btn');
+    const appealBtn = postDiv.querySelector('.appeal-btn');
 
-    commentBtn.addEventListener('click', () => {
-      const commenterName = commentName.value.trim() || 'Anonymous';
-      if(commentInput.value.trim() !== '') {
-        post.comments.push({name: commenterName, text: commentInput.value.trim()});
+    if(commentBtn) {
+      commentBtn.addEventListener('click', () => {
+        const commenterName = commentName.value.trim() || 'Anonymous';
+        if(commentInput.value.trim() !== '') {
+          post.comments.push({name: commenterName, text: commentInput.value.trim()});
+          savePosts();
+          renderPosts();
+        }
+      });
+    }
+
+    if(reportBtn) {
+      reportBtn.addEventListener('click', () => {
+        post.reported = true;
+        post.dateReported = new Date();
+        alert('This post has been reported 💖');
         savePosts();
         renderPosts();
-      }
-    });
+      });
+    }
 
-    reportBtn.addEventListener('click', () => {
-      post.reported = true;
-      alert('This post has been reported. Thank you 💖');
-      savePosts();
-      renderPosts();
-    });
-
-    if(post.reported) {
-      postDiv.style.opacity = '0.6';
+    if(appealBtn) {
+      appealBtn.addEventListener('click', () => {
+        emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+          post_title: post.title,
+          post_content: post.content,
+          poster_name: post.name || 'Anonymous',
+          post_date: new Date(post.date).toLocaleString(),
+          to_email: "msgreport@femboymediacorporation.co.uk"
+        }).then(() => {
+          alert("Your appeal request has been sent to the admin 💖");
+        }, (err) => {
+          alert("Oops! Something went wrong 💜");
+          console.error(err);
+        });
+      });
     }
   });
 }
 
-// Handle new post submission
+// New post submission
 document.getElementById('newPostForm').addEventListener('submit', e => {
   e.preventDefault();
   const name = document.getElementById('posterName').value.trim() || 'Anonymous';
   const title = document.getElementById('postTitle').value.trim();
   const content = document.getElementById('postContent').value.trim();
   if(title && content) {
-    posts.push({name, title, content, date: new Date(), comments: [], reported: false});
+    posts.push({name, title, content, date: new Date(), comments: [], reported: false, dateReported: null});
     savePosts();
     renderPosts();
     document.getElementById('newPostForm').reset();
