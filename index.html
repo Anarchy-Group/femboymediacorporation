@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Femboy Media Corporation</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Basic Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Comfortaa', cursive; background: #f8f0ff; color: #333; line-height: 1.6; }
+
+/* Header */
+header { background: #fcd9f0; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+header img { max-width: 200px; margin-bottom: 10px; } /* LOGO GOES HERE */
+nav a { margin: 0 15px; text-decoration: none; color: #6b1cb1; font-weight: bold; transition: 0.3s; }
+nav a:hover { color: #ff6fcf; }
+
+/* Hero Section */
+.hero { position: relative; background: linear-gradient(135deg, #fcd9f0, #f0e0ff); padding: 100px 20px; text-align: center; overflow: hidden; }
+.hero-bg span { position: absolute; display: block; width: 20px; height: 20px; background: rgba(255, 111, 207, 0.7); border-radius: 50%; animation: float 10s linear infinite; }
+.hero-bg span:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+.hero-bg span:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 2s; }
+.hero-bg span:nth-child(3) { left: 30%; animation-duration: 12s; animation-delay: 4s; }
+.hero-bg span:nth-child(4) { left: 40%; animation-duration: 9s; animation-delay: 1s; }
+.hero-bg span:nth-child(5) { left: 50%; animation-duration: 11s; animation-delay: 3s; }
+.hero-bg span:nth-child(6) { left: 60%; animation-duration: 10s; animation-delay: 2s; }
+.hero-bg span:nth-child(7) { left: 70%; animation-duration: 12s; animation-delay: 0s; }
+.hero-bg span:nth-child(8) { left: 80%; animation-duration: 9s; animation-delay: 1s; }
+.hero-bg span:nth-child(9) { left: 90%; animation-duration: 11s; animation-delay: 4s; }
+.hero-bg span:nth-child(10) { left: 100%; animation-duration: 8s; animation-delay: 3s; }
+
+@keyframes float {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0.7; }
+  50% { transform: translateY(50vh) scale(1); opacity: 0.9; }
+  100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+}
+
+.hero-content { position: relative; z-index: 2; }
+.hero h1 { font-size: 3em; color: #6b1cb1; margin-bottom: 20px; }
+.hero p { font-size: 1.2em; color: #333; }
+.btn { display: inline-block; padding: 10px 25px; background: #ff6fcf; color: #fff; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+.btn:hover { background: #6b1cb1; }
+
+/* Sections */
+section { padding: 80px 20px; text-align: center; }
+section h2 { font-size: 2.2em; color: #6b1cb1; margin-bottom: 20px; }
+section p { max-width: 800px; margin: 0 auto 40px; }
+
+/* Media Grid */
+.media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.media-grid img { width: 100%; border-radius: 15px; transition: 0.3s; cursor: pointer; }
+.media-grid img:hover { transform: scale(1.05); }
+
+/* Contact Form */
+form { max-width: 500px; margin: 0 auto; text-align: left; }
+form label { display: block; margin-bottom: 5px; font-weight: bold; }
+form input, form textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ccc; }
+form button { background: #6b1cb1; color: #fff; border: none; padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+form button:hover { background: #ff6fcf; }
+
+/* Footer */
+footer { background: #fcd9f0; padding: 40px 20px; text-align: center; }
+footer a { color: #6b1cb1; margin: 0 10px; text-decoration: none; font-weight: bold; }
+footer a:hover { color: #ff6fcf; }
+footer p { margin-top: 20px; font-size: 0.9em; color: #333; }
+
+/* Extra Pages Links */
+.page-link { display: inline-block; margin: 10px; padding: 10px 20px; background: #ff6fcf; color: #fff; border-radius: 25px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+.page-link:hover { background: #6b1cb1; }
+</style>
+</head>
+<body>
+
+<header>
+  <!-- LOGO GOES HERE -->
+  <img src="your-logo.png" alt="Femboy Media Corporation Logo">
+  <nav>
+    <a href="#about">About</a>
+    <a href="#media">Media</a>
+    <a href="#blog">Blog</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-bg">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="hero-content">
+    <h1>Welcome to Femboy Media Corporation!</h1>
+    <p>Your hub for all things femboy, gaming, anime, and kawaii culture! Dive in and explore our world 💖</p>
+    <a href="#media" class="btn">Explore Media</a>
+  </div>
+</section>
+
+<section id="about">
+  <h2>About Us</h2>
+  <p>Femboy Media Corporation is dedicated to spreading cute, fun, and fabulous media content for everyone. From gaming streams to cosplay, we celebrate all things femboy culture with love, energy, and pastel vibes 💜✨</p>
+</section>
+
+<section id="media">
+  <h2>Our Media</h2>
+  <div class="media-grid">
+    <img src="media1.jpg" alt="Media 1">
+    <img src="media2.jpg" alt="Media 2">
+    <img src="media3.jpg" alt="Media 3">
+    <img src="media4.jpg" alt="Media 4">
+  </div>
+</section>
+
+<section id="blog">
+  <h2>Latest News</h2>
+  <p>Check out our latest projects, events, and cute femboy adventures! Stay tuned for updates, collabs, and kawaii content ✨😽</p>
+  <a href="blog.html" class="page-link">See All Blog Posts</a>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <p>We’re always cooking up new content, collaborations, and streams. Explore our ongoing and upcoming projects to see what’s next in the femboy media world 💖</p>
+  <a href="projects.html" class="page-link">View All Projects</a>
+</section>
+
+<section id="contact">
+  <h2>Contact Us</h2>
+  <form>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" placeholder="Your name..." required>
+    
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Your email..." required>
+    
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="5" placeholder="Say hi or collaborate..." required></textarea>
+    
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<footer>
+  <p>Follow us on socials!</p>
+  <a href="#">Twitter</a>
+  <a href="#">Instagram</a>
+  <a href="#">Discord</a>
+  <p>© 2026 Femboy Media Corporation | Part of the Anarchy Broadcasting Authority Network</p>
+</footer>
+
+</body>
+</html>
