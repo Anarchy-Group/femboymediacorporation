@@ -30,6 +30,7 @@ form button:hover { background: #ff6fcf; }
 .post { background: #fff0ff; padding: 15px; margin-bottom: 20px; border-radius: 15px; text-align: left; position: relative; }
 .post h3 { margin-bottom: 5px; color: #6b1cb1; }
 .post p { margin-bottom: 10px; }
+.post img { max-width: 100%; border-radius: 15px; margin-bottom: 10px; }
 .post .poster-name { font-weight: bold; color: #ff6fcf; margin-bottom:5px; }
 .post .post-date { font-size: 0.8em; color: #666; margin-left: 10px; }
 .report-badge { position: absolute; top: 10px; left: 10px; background: #ff6fcf; color: #fff; padding: 3px 8px; border-radius: 12px; font-size:0.8em; }
@@ -65,13 +66,14 @@ footer p { margin-top: 20px; font-size: 0.9em; color: #333; }
 
 <section>
   <h1>Community Forum 💖</h1>
-  <p>Post your ideas and let the community comment on them! Spread your creativity ✨</p>
+  <p>Post your ideas, add images, and let the community comment! ✨</p>
 
   <form id="newPostForm">
     <div class="note">If you want to remain anonymous, just leave the name field blank 💜</div>
     <input type="text" id="posterName" placeholder="Your name...">
     <input type="text" id="postTitle" placeholder="Post title..." required>
     <textarea id="postContent" rows="4" placeholder="Write your idea here..." required></textarea>
+    <input type="file" id="postImage" accept="image/*">
     <button type="submit">Post Idea</button>
   </form>
 
@@ -117,22 +119,26 @@ function renderPosts() {
     const postDiv = document.createElement('div');
     postDiv.className = 'post';
     const date = new Date(post.date).toLocaleString();
-    let commentsHtml = '';
+
+    // Only show comments/input/image if not reported
+    let contentHtml = '';
     if(!post.reported) {
-      commentsHtml = `
+      const imageHtml = post.image ? `<img src="${post.image}" alt="Post Image">` : '';
+      contentHtml = `
+        ${imageHtml}
         ${post.comments.map(c => `<div class="comment"><span class="commenter-name">${c.name || 'Anonymous'}:</span>${c.text}</div>`).join('')}
         <input type="text" class="comment-name" placeholder="Your name">
         <input type="text" class="comment-input" placeholder="Add a comment...">
         <button class="comment-btn">Comment</button>
       `;
     }
+
     postDiv.innerHTML = `
       ${post.reported ? '<span class="report-badge">Reported</span>' : ''}
       <div><span class="poster-name">${post.name || 'Anonymous'} says:</span><span class="post-date">${date}</span></div>
       <h3>${post.title}</h3>
-      <p>${post.content}</p>
+      ${contentHtml}
       ${post.reported ? '<button class="appeal-btn">Request Appeal</button>' : '<button class="report-btn">Report</button>'}
-      <div class="comment-section">${commentsHtml}</div>
     `;
     container.appendChild(postDiv);
 
@@ -188,10 +194,22 @@ document.getElementById('newPostForm').addEventListener('submit', e => {
   const name = document.getElementById('posterName').value.trim() || 'Anonymous';
   const title = document.getElementById('postTitle').value.trim();
   const content = document.getElementById('postContent').value.trim();
+  const imageFile = document.getElementById('postImage').files[0];
+
   if(title && content) {
-    posts.push({name, title, content, date: new Date(), comments: [], reported: false, dateReported: null});
-    savePosts();
-    renderPosts();
+    if(imageFile) {
+      const reader = new FileReader();
+      reader.onload = function(e){
+        posts.push({name, title, content, image:e.target.result, date: new Date(), comments: [], reported: false, dateReported: null});
+        savePosts();
+        renderPosts();
+      }
+      reader.readAsDataURL(imageFile);
+    } else {
+      posts.push({name, title, content, image:null, date: new Date(), comments: [], reported: false, dateReported: null});
+      savePosts();
+      renderPosts();
+    }
     document.getElementById('newPostForm').reset();
   }
 });
