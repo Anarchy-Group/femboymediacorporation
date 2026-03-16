@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,17 +30,32 @@ color:#6b1cb1;
 font-weight:bold;
 }
 
+section{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
 .hero{
 text-align:center;
 padding:60px 20px;
 background:linear-gradient(135deg,#ffd6f3,#e8d7ff);
 }
 
-.progress-section{
-max-width:900px;
-margin:auto;
-padding:20px;
+#loginBox{
+max-width:400px;
+margin:80px auto;
+background:white;
+padding:30px;
+border-radius:15px;
 text-align:center;
+}
+
+input,select,textarea{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+margin:5px;
 }
 
 .progress-bar{
@@ -55,62 +71,29 @@ background:#ff6fcf;
 width:0%;
 }
 
-.featured{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
-
-.best{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
-
-.controls{
-max-width:1000px;
-margin:auto;
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-justify-content:center;
-padding:20px;
-}
-
-.controls input,.controls select{
-padding:10px;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
 .tutorials{
-max-width:1200px;
-margin:auto;
-padding:20px;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
+gap:20px;
 }
 
 .card{
 background:white;
 padding:20px;
-border-radius:16px;
+border-radius:15px;
 box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-4px);
 }
 
 .tag{
 font-size:12px;
 padding:4px 10px;
-border-radius:12px;
+border-radius:10px;
 margin-right:5px;
 }
-
-/* difficulty colours */
 
 .beginner{background:#b8ffcc}
 .intermediate{background:#ffe8a3}
@@ -121,38 +104,13 @@ cursor:pointer;
 font-size:18px;
 }
 
-.complete-btn{
-margin-top:10px;
-padding:6px 12px;
+button{
+padding:8px 12px;
 border:none;
 border-radius:10px;
 background:#ff6fcf;
 color:white;
 cursor:pointer;
-}
-
-.achievements{
-max-width:900px;
-margin:auto;
-padding:20px;
-background:white;
-border-radius:15px;
-}
-
-.submit-box{
-max-width:800px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:15px;
-}
-
-.submit-box input,.submit-box textarea,.submit-box select{
-width:100%;
-padding:10px;
-margin:8px 0;
-border-radius:10px;
-border:1px solid #ccc;
 }
 
 footer{
@@ -180,40 +138,45 @@ margin-top:40px;
 
 </header>
 
-<section class="hero">
-<h1>Creator Tutorials</h1>
-<p>Learn content creation, fashion, cosplay and more.</p>
-</section>
+<div id="loginBox">
 
-<section class="progress-section">
+<h2>Creator Login</h2>
 
-<h3>Your Learning Progress</h3>
+<input id="loginName" placeholder="Enter your creator name">
+
+<br><br>
+
+<button onclick="login()">Enter Academy</button>
+
+</div>
+
+<section id="mainContent" style="display:none">
+
+<div class="hero">
+<h1>Creator Academy</h1>
+<p>Learn fashion, photography, cosplay and content creation.</p>
+</div>
+
+<section>
+
+<h2 id="welcomeUser"></h2>
+
+<p>Level: <span id="level">1</span></p>
+<p>XP: <span id="xp">0</span></p>
+
+<p>Tutorials Completed: <span id="completedCount">0</span></p>
 
 <div class="progress-bar">
 <div class="progress-fill" id="progressFill"></div>
 </div>
 
-<p id="progressText"></p>
-
 </section>
 
-<section class="featured">
+<section>
 
-<h2>Featured Tutorials</h2>
-<div id="featuredContainer"></div>
+<h2>Search Tutorials</h2>
 
-</section>
-
-<section class="best">
-
-<h2>Community Best Tutorials ⭐</h2>
-<div id="bestContainer"></div>
-
-</section>
-
-<div class="controls">
-
-<input type="text" id="search" placeholder="Search tutorials">
+<input id="search" placeholder="Search tutorials">
 
 <select id="categoryFilter">
 <option value="all">All Categories</option>
@@ -222,7 +185,6 @@ margin-top:40px;
 <option>Makeup</option>
 <option>Cosplay</option>
 <option>Streaming</option>
-<option>Posing</option>
 <option>Editing</option>
 </select>
 
@@ -233,11 +195,27 @@ margin-top:40px;
 <option>Advanced</option>
 </select>
 
-</div>
+</section>
+
+<section>
+
+<h2>Featured Tutorials</h2>
+
+<div id="featured"></div>
+
+</section>
+
+<section>
+
+<h2>Community Best Tutorials</h2>
+
+<div id="bestTutorials"></div>
+
+</section>
 
 <section class="tutorials" id="tutorialContainer"></section>
 
-<section class="achievements">
+<section>
 
 <h2>Achievements</h2>
 
@@ -245,9 +223,33 @@ margin-top:40px;
 
 </section>
 
-<section class="submit-box">
+<section>
 
-<h2>Submit a Tutorial</h2>
+<h2>Category Badges</h2>
+
+<ul id="badgeList"></ul>
+
+</section>
+
+<section>
+
+<h2>Recommended Tutorials</h2>
+
+<div id="recommended"></div>
+
+</section>
+
+<section>
+
+<h2>Community Leaderboard</h2>
+
+<ol id="leaderboard"></ol>
+
+</section>
+
+<section>
+
+<h2>Submit Tutorial</h2>
 
 <input id="userTitle" placeholder="Title">
 <textarea id="userDesc" placeholder="Description"></textarea>
@@ -258,7 +260,6 @@ margin-top:40px;
 <option>Makeup</option>
 <option>Cosplay</option>
 <option>Streaming</option>
-<option>Posing</option>
 <option>Editing</option>
 </select>
 
@@ -268,12 +269,26 @@ margin-top:40px;
 <option>Advanced</option>
 </select>
 
-<button onclick="submitTutorial()">Submit</button>
+<br>
+
+<button onclick="submitTutorial()">Submit Tutorial</button>
+
+</section>
+
+<section>
+
+<h2>Pending Tutorials (Admin)</h2>
+
+<div id="pending"></div>
+
+</section>
 
 </section>
 
 <footer>
+
 <p>© 2026 Femboy Media Corporation | Part of the Anarchy Broadcasting Authority Network</p>
+
 </footer>
 
 <script>
@@ -281,78 +296,112 @@ margin-top:40px;
 let tutorials=[
 
 {title:"Beginner Femboy Fashion Guide",category:"Fashion",difficulty:"Beginner",desc:"Starter outfits"},
-{title:"Skirt Styling Tips",category:"Fashion",difficulty:"Beginner",desc:"Cute outfit combos"},
+{title:"Skirt Styling Tips",category:"Fashion",difficulty:"Beginner",desc:"Outfit combos"},
 {title:"Thigh High Outfit Ideas",category:"Fashion",difficulty:"Beginner",desc:"Style thigh highs"},
 {title:"Makeup Basics",category:"Makeup",difficulty:"Beginner",desc:"Soft makeup guide"},
-{title:"Eyeliner Tutorial",category:"Makeup",difficulty:"Beginner",desc:"Cute eyeliner styles"},
-{title:"Wig Styling Basics",category:"Cosplay",difficulty:"Beginner",desc:"Cosplay wig guide"},
+{title:"Eyeliner Tutorial",category:"Makeup",difficulty:"Beginner",desc:"Cute eyeliner"},
 {title:"Cosplay Starter Setup",category:"Cosplay",difficulty:"Beginner",desc:"Beginner cosplay"},
-{title:"Lighting for Selfies",category:"Photography",difficulty:"Beginner",desc:"Better photos"},
+{title:"Lighting for Selfies",category:"Photography",difficulty:"Beginner",desc:"Better selfies"},
 {title:"Mirror Selfie Tricks",category:"Photography",difficulty:"Beginner",desc:"Improve selfies"},
-{title:"Camera Pose Guide",category:"Posing",difficulty:"Beginner",desc:"Cute poses"},
-{title:"Room Aesthetic Setup",category:"Photography",difficulty:"Intermediate",desc:"Aesthetic rooms"},
 {title:"Photo Editing Basics",category:"Editing",difficulty:"Beginner",desc:"Edit photos"},
-{title:"Advanced Editing Tricks",category:"Editing",difficulty:"Advanced",desc:"Pro editing"},
 {title:"Streaming Setup Guide",category:"Streaming",difficulty:"Intermediate",desc:"Start streaming"},
-{title:"OBS Basics",category:"Streaming",difficulty:"Beginner",desc:"OBS setup"},
-{title:"TikTok Editing Guide",category:"Editing",difficulty:"Intermediate",desc:"Video edits"},
-{title:"Instagram Growth Tips",category:"Photography",difficulty:"Intermediate",desc:"Grow socials"},
-{title:"Cosplay Prop Making",category:"Cosplay",difficulty:"Advanced",desc:"Build props"}
-
+{title:"Advanced Editing Tricks",category:"Editing",difficulty:"Advanced",desc:"Pro editing"}
 ]
 
-function getRating(id){
-return localStorage.getItem("rating_"+id)||0
+let pendingTutorials=JSON.parse(localStorage.getItem("pendingTutorials")||"[]")
+
+function login(){
+
+let name=document.getElementById("loginName").value
+
+if(name==="") return alert("Enter a name")
+
+localStorage.setItem("username",name)
+
+document.getElementById("loginBox").style.display="none"
+document.getElementById("mainContent").style.display="block"
+
+loadProfile()
+
 }
 
-function rateTutorial(id,stars){
-localStorage.setItem("rating_"+id,stars)
-render()
+function getXP(){
+return parseInt(localStorage.getItem("xp")||0)
+}
+
+function addXP(amount){
+
+let xp=getXP()+amount
+
+localStorage.setItem("xp",xp)
+
+updateLevel()
+
+}
+
+function updateLevel(){
+
+let xp=getXP()
+
+let level=Math.floor(xp/120)+1
+
+document.getElementById("xp").innerText=xp
+document.getElementById("level").innerText=level
+
 }
 
 function saveProgress(id){
+
+if(!localStorage.getItem("done_"+id)){
+addXP(20)
+}
+
 localStorage.setItem("done_"+id,true)
+
 render()
-}
-
-function isDone(id){
-return localStorage.getItem("done_"+id)
-}
-
-function renderProgress(){
-
-let done=0
-
-tutorials.forEach((t,i)=>{
-if(isDone(i)) done++
-})
-
-let percent=Math.round((done/tutorials.length)*100)
-
-document.getElementById("progressFill").style.width=percent+"%"
-document.getElementById("progressText").innerText=done+" of "+tutorials.length+" tutorials completed"
 
 }
 
-function renderAchievements(){
+function rateTutorial(id,stars){
 
-let done=0
-tutorials.forEach((t,i)=>{if(isDone(i)) done++})
+localStorage.setItem("rating_"+id,stars)
 
-let list=document.getElementById("achievementList")
-list.innerHTML=""
+render()
 
-if(done>=1) list.innerHTML+="<li>🌱 First Tutorial Completed</li>"
-if(done>=5) list.innerHTML+="<li>📚 Learning Beginner</li>"
-if(done>=10) list.innerHTML+="<li>🚀 Rising Creator</li>"
-if(done>=15) list.innerHTML+="<li>👑 Tutorial Master</li>"
+}
+
+function getRating(id){
+
+return localStorage.getItem("rating_"+id)||0
+
+}
+
+function loadProfile(){
+
+let name=localStorage.getItem("username")
+
+document.getElementById("welcomeUser").innerText="Welcome "+name
+
+updateLevel()
+
+render()
 
 }
 
 function render(){
 
+renderTutorials()
 renderProgress()
 renderAchievements()
+renderBadges()
+renderLeaderboard()
+renderRecommended()
+renderBest()
+renderPending()
+
+}
+
+function renderTutorials(){
 
 let container=document.getElementById("tutorialContainer")
 container.innerHTML=""
@@ -370,6 +419,7 @@ t.title.toLowerCase().includes(search)&&
 ){
 
 let stars=""
+
 for(let s=1;s<=5;s++){
 stars+=`<span onclick="rateTutorial(${i},${s})">${s<=getRating(i)?"⭐":"☆"}</span>`
 }
@@ -390,7 +440,7 @@ card.innerHTML=`
 
 <div class="rating">${stars}</div>
 
-<button class="complete-btn" onclick="saveProgress(${i})">Mark Complete</button>
+<button onclick="saveProgress(${i})">Mark Complete</button>
 
 `
 
@@ -400,7 +450,107 @@ container.appendChild(card)
 
 })
 
-renderBest()
+}
+
+function renderProgress(){
+
+let done=0
+
+tutorials.forEach((t,i)=>{
+if(localStorage.getItem("done_"+i)) done++
+})
+
+document.getElementById("completedCount").innerText=done
+
+let percent=Math.round((done/tutorials.length)*100)
+
+document.getElementById("progressFill").style.width=percent+"%"
+
+}
+
+function renderAchievements(){
+
+let done=0
+
+tutorials.forEach((t,i)=>{
+if(localStorage.getItem("done_"+i)) done++
+})
+
+let list=document.getElementById("achievementList")
+
+list.innerHTML=""
+
+if(done>=1) list.innerHTML+="<li>🌱 First Step</li>"
+if(done>=5) list.innerHTML+="<li>📚 Learning Creator</li>"
+if(done>=8) list.innerHTML+="<li>🚀 Rising Star</li>"
+if(done>=10) list.innerHTML+="<li>👑 Tutorial Master</li>"
+
+}
+
+function renderBadges(){
+
+let counts={}
+let list=document.getElementById("badgeList")
+list.innerHTML=""
+
+tutorials.forEach((t,i)=>{
+if(localStorage.getItem("done_"+i)){
+counts[t.category]=(counts[t.category]||0)+1
+}
+})
+
+for(let cat in counts){
+
+if(counts[cat]>=2){
+
+list.innerHTML+=`<li>🏅 ${cat} Expert</li>`
+
+}
+
+}
+
+}
+
+function renderLeaderboard(){
+
+let board=[
+
+{name:"CreatorNova",xp:420},
+{name:"PixelFemboy",xp:350},
+{name:"StreamerCat",xp:300},
+{name:localStorage.getItem("username"),xp:getXP()}
+
+]
+
+board.sort((a,b)=>b.xp-a.xp)
+
+let list=document.getElementById("leaderboard")
+
+list.innerHTML=""
+
+board.forEach(u=>{
+list.innerHTML+=`<li>${u.name} — ${u.xp} XP</li>`
+})
+
+}
+
+function renderRecommended(){
+
+let favCats={}
+let rec=document.getElementById("recommended")
+rec.innerHTML=""
+
+tutorials.forEach((t,i)=>{
+if(localStorage.getItem("done_"+i)){
+favCats[t.category]=true
+}
+})
+
+tutorials.forEach((t,i)=>{
+if(favCats[t.category] && !localStorage.getItem("done_"+i)){
+rec.innerHTML+=`<p>👉 ${t.title}</p>`
+}
+})
 
 }
 
@@ -408,7 +558,7 @@ function renderBest(){
 
 let best=[...tutorials].sort((a,b)=>getRating(tutorials.indexOf(b))-getRating(tutorials.indexOf(a)))
 
-let container=document.getElementById("bestContainer")
+let container=document.getElementById("bestTutorials")
 container.innerHTML=""
 
 best.slice(0,3).forEach(t=>{
@@ -419,12 +569,64 @@ container.innerHTML+=`<p>⭐ ${t.title}</p>`
 
 function submitTutorial(){
 
-let title=document.getElementById("userTitle").value
-let desc=document.getElementById("userDesc").value
-let cat=document.getElementById("userCategory").value
-let diff=document.getElementById("userDifficulty").value
+let tutorial={
+title:userTitle.value,
+desc:userDesc.value,
+category:userCategory.value,
+difficulty:userDifficulty.value
+}
 
-tutorials.push({title:title,desc:desc,category:cat,difficulty:diff})
+pendingTutorials.push(tutorial)
+
+localStorage.setItem("pendingTutorials",JSON.stringify(pendingTutorials))
+
+alert("Submitted for approval")
+
+}
+
+function renderPending(){
+
+let container=document.getElementById("pending")
+
+container.innerHTML=""
+
+pendingTutorials.forEach((t,i)=>{
+
+container.innerHTML+=`
+
+<div>
+
+<b>${t.title}</b>
+
+<button onclick="approve(${i})">Approve</button>
+
+<button onclick="reject(${i})">Reject</button>
+
+</div>
+
+`
+
+})
+
+}
+
+function approve(i){
+
+tutorials.push(pendingTutorials[i])
+
+pendingTutorials.splice(i,1)
+
+localStorage.setItem("pendingTutorials",JSON.stringify(pendingTutorials))
+
+render()
+
+}
+
+function reject(i){
+
+pendingTutorials.splice(i,1)
+
+localStorage.setItem("pendingTutorials",JSON.stringify(pendingTutorials))
 
 render()
 
@@ -434,9 +636,8 @@ document.getElementById("search").addEventListener("input",render)
 document.getElementById("categoryFilter").addEventListener("change",render)
 document.getElementById("difficultyFilter").addEventListener("change",render)
 
-render()
-
 </script>
 
 </body>
 </html>
+```
