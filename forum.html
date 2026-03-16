@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Forum | Femboy Media Corporation</title>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Comfortaa', cursive; background: #f8f0ff; color: #333; margin:0; padding:0; }
+header { background: #fcd9f0; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+header img { max-width: 200px; }
+nav a { margin: 0 15px; text-decoration: none; color: #6b1cb1; font-weight: bold; transition:0.3s; }
+nav a:hover { color: #ff6fcf; }
+
+section { padding: 80px 20px; text-align: center; }
+h1,h2 { color: #6b1cb1; }
+h2 { margin-bottom: 20px; }
+
+form { max-width: 600px; margin: 0 auto 40px; text-align: left; }
+form input, form textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ccc; }
+form button { background: #6b1cb1; color: #fff; border: none; padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition:0.3s; }
+form button:hover { background: #ff6fcf; }
+
+.note { font-size: 0.9em; color: #666; margin-bottom: 15px; }
+
+.post { background: #fff0ff; padding: 15px; margin-bottom: 20px; border-radius: 15px; text-align: left; position: relative; }
+.post h3 { margin-bottom: 5px; color: #6b1cb1; }
+.post p { margin-bottom: 10px; }
+.post .poster-name { font-weight: bold; color: #ff6fcf; margin-bottom:5px; }
+.post .post-date { font-size: 0.8em; color: #666; margin-left: 10px; }
+
+.comment-section { margin-top: 10px; }
+.comment { background: #fce4fa; padding: 10px; margin-bottom: 10px; border-radius: 10px; }
+.comment .commenter-name { font-weight: bold; color: #6b1cb1; margin-right:5px; }
+
+.report-btn { position: absolute; top: 10px; right: 10px; background: #ff6fcf; color: #fff; border: none; padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 0.8em; transition: 0.3s; }
+.report-btn:hover { background: #6b1cb1; }
+
+.btn { display: inline-block; margin-top: 20px; padding: 10px 25px; background: #ff6fcf; color:#fff; border-radius:50px; text-decoration:none; font-weight:bold; transition:0.3s; }
+.btn:hover { background: #6b1cb1; }
+
+footer { background: #fcd9f0; padding: 40px 20px; text-align: center; }
+footer a { color: #6b1cb1; margin: 0 10px; text-decoration: none; font-weight: bold; }
+footer a:hover { color: #ff6fcf; }
+footer p { margin-top: 20px; font-size: 0.9em; color: #333; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="your-logo.png" alt="Femboy Media Corporation Logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="community.html">Community</a>
+    <a href="merch.html">Merch</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section>
+  <h1>Community Forum 💖</h1>
+  <p>Post your ideas and let the community comment on them! Spread your creativity ✨</p>
+
+  <form id="newPostForm">
+    <div class="note">If you want to remain anonymous, just leave the name field blank 💜</div>
+    <input type="text" id="posterName" placeholder="Your name...">
+    <input type="text" id="postTitle" placeholder="Post title..." required>
+    <textarea id="postContent" rows="4" placeholder="Write your idea here..." required></textarea>
+    <button type="submit">Post Idea</button>
+  </form>
+
+  <div id="postsContainer">
+    <!-- Posts will appear here -->
+  </div>
+
+  <a href="index.html" class="btn">Back to Home</a>
+</section>
+
+<footer>
+  <p>Follow us on socials!</p>
+  <a href="#">Twitter</a>
+  <a href="#">Instagram</a>
+  <a href="#">Discord</a>
+  <p>© 2026 Femboy Media Corporation | Part of the Anarchy Broadcasting Authority Network</p>
+</footer>
+
+<script>
+// Load posts from localStorage
+let posts = JSON.parse(localStorage.getItem('femboyPosts')) || [];
+
+function savePosts() {
+  localStorage.setItem('femboyPosts', JSON.stringify(posts));
+}
+
+function renderPosts() {
+  const container = document.getElementById('postsContainer');
+  container.innerHTML = '';
+  posts.forEach((post, postIndex) => {
+    const postDiv = document.createElement('div');
+    postDiv.className = 'post';
+    const date = new Date(post.date).toLocaleString();
+    postDiv.innerHTML = `
+      <div><span class="poster-name">${post.name || 'Anonymous'} says:</span><span class="post-date">${date}</span></div>
+      <h3>${post.title}</h3>
+      <p>${post.content}</p>
+      <button class="report-btn">Report</button>
+      <div class="comment-section">
+        ${post.comments.map(c => `<div class="comment"><span class="commenter-name">${c.name || 'Anonymous'}:</span>${c.text}</div>`).join('')}
+        <input type="text" class="comment-name" placeholder="Your name">
+        <input type="text" class="comment-input" placeholder="Add a comment...">
+        <button class="comment-btn">Comment</button>
+      </div>
+    `;
+    container.appendChild(postDiv);
+
+    const commentBtn = postDiv.querySelector('.comment-btn');
+    const commentInput = postDiv.querySelector('.comment-input');
+    const commentName = postDiv.querySelector('.comment-name');
+    const reportBtn = postDiv.querySelector('.report-btn');
+
+    commentBtn.addEventListener('click', () => {
+      const commenterName = commentName.value.trim() || 'Anonymous';
+      if(commentInput.value.trim() !== '') {
+        post.comments.push({name: commenterName, text: commentInput.value.trim()});
+        savePosts();
+        renderPosts();
+      }
+    });
+
+    reportBtn.addEventListener('click', () => {
+      post.reported = true;
+      alert('This post has been reported. Thank you 💖');
+      savePosts();
+      renderPosts();
+    });
+
+    if(post.reported) {
+      postDiv.style.opacity = '0.6';
+    }
+  });
+}
+
+// Handle new post submission
+document.getElementById('newPostForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('posterName').value.trim() || 'Anonymous';
+  const title = document.getElementById('postTitle').value.trim();
+  const content = document.getElementById('postContent').value.trim();
+  if(title && content) {
+    posts.push({name, title, content, date: new Date(), comments: [], reported: false});
+    savePosts();
+    renderPosts();
+    document.getElementById('newPostForm').reset();
+  }
+});
+
+// Initial render
+renderPosts();
+</script>
+
+</body>
+</html>
