@@ -1,0 +1,405 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Events | Femboy Media Corporation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Comfortaa',cursive;
+margin:0;
+background:#f8f0ff;
+color:#333;
+}
+
+header{
+background:#fcd9f0;
+padding:20px;
+text-align:center;
+}
+
+nav a{
+margin:0 15px;
+text-decoration:none;
+color:#6b1cb1;
+font-weight:bold;
+}
+
+.hero{
+text-align:center;
+padding:70px 20px;
+background:linear-gradient(135deg,#ffd6f3,#e8d7ff);
+}
+
+section{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.events{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.tag{
+font-size:12px;
+padding:4px 10px;
+border-radius:10px;
+margin-right:5px;
+}
+
+.community{background:#c8f7ff}
+.stream{background:#ffe8a3}
+.contest{background:#ffb8e6}
+.release{background:#b8ffcc}
+
+.countdown{
+font-weight:bold;
+margin-top:10px;
+}
+
+input,select,textarea{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+margin:5px;
+}
+
+button{
+padding:8px 12px;
+border:none;
+border-radius:10px;
+background:#ff6fcf;
+color:white;
+cursor:pointer;
+}
+
+footer{
+background:#fcd9f0;
+text-align:center;
+padding:40px;
+margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<img src="your-logo.png" width="200">
+
+<nav>
+<a href="index.html">Home</a>
+<a href="gallery.html">Gallery</a>
+<a href="community.html">Community</a>
+<a href="tutorials.html">Tutorials</a>
+<a href="events.html">Events</a>
+</nav>
+
+</header>
+
+<div class="hero">
+
+<h1>Femboy Media Events</h1>
+
+<p>Livestreams, contests, community hangouts and special broadcasts.</p>
+
+</div>
+
+<section>
+
+<h2>Search Events</h2>
+
+<input id="search" placeholder="Search events">
+
+<select id="categoryFilter">
+<option value="all">All Categories</option>
+<option>Community</option>
+<option>Stream</option>
+<option>Contest</option>
+<option>Release</option>
+</select>
+
+</section>
+
+<section>
+
+<h2>Featured Event</h2>
+
+<div id="featuredEvent"></div>
+
+</section>
+
+<section>
+
+<h2>Upcoming Events</h2>
+
+<div class="events" id="eventContainer"></div>
+
+</section>
+
+<section>
+
+<h2>Submit Community Event</h2>
+
+<input id="eventTitle" placeholder="Event Title">
+
+<textarea id="eventDesc" placeholder="Event Description"></textarea>
+
+<input id="eventDate" type="datetime-local">
+
+<select id="eventCategory">
+<option>Community</option>
+<option>Stream</option>
+<option>Contest</option>
+<option>Release</option>
+</select>
+
+<br>
+
+<button onclick="submitEvent()">Submit Event</button>
+
+</section>
+
+<section>
+
+<h2>Pending Events (Admin)</h2>
+
+<div id="pendingEvents"></div>
+
+</section>
+
+<footer>
+
+<p>© 2026 Femboy Media Corporation | Part of the Anarchy Broadcasting Authority Network</p>
+
+</footer>
+
+<script>
+
+let events=[
+
+{
+title:"Community Hangout Stream",
+desc:"Chat with the community and hang out live.",
+date:"2026-04-10T19:00",
+category:"Stream"
+},
+
+{
+title:"Femboy Outfit Contest",
+desc:"Submit your best outfits and win prizes.",
+date:"2026-04-18T18:00",
+category:"Contest"
+},
+
+{
+title:"Photography Workshop",
+desc:"Learn selfie lighting and camera tricks.",
+date:"2026-04-25T17:00",
+category:"Community"
+},
+
+{
+title:"New Media Series Launch",
+desc:"Official release event for the next show.",
+date:"2026-05-05T20:00",
+category:"Release"
+}
+
+]
+
+let pendingEvents=JSON.parse(localStorage.getItem("pendingEvents")||"[]")
+
+function renderEvents(){
+
+let container=document.getElementById("eventContainer")
+container.innerHTML=""
+
+let search=document.getElementById("search").value.toLowerCase()
+let cat=document.getElementById("categoryFilter").value
+
+events.forEach((e,i)=>{
+
+if(
+e.title.toLowerCase().includes(search) &&
+(cat=="all" || e.category==cat)
+){
+
+let tagClass=e.category.toLowerCase()
+
+let card=document.createElement("div")
+card.className="card"
+
+card.innerHTML=`
+
+<h3>${e.title}</h3>
+
+<p>${e.desc}</p>
+
+<span class="tag ${tagClass}">${e.category}</span>
+
+<div class="countdown" id="countdown${i}"></div>
+
+`
+
+container.appendChild(card)
+
+startCountdown(e.date,"countdown"+i)
+
+}
+
+})
+
+renderFeatured()
+
+}
+
+function startCountdown(date,id){
+
+let target=new Date(date).getTime()
+
+setInterval(()=>{
+
+let now=new Date().getTime()
+
+let distance=target-now
+
+if(distance<0){
+document.getElementById(id).innerText="Event Started"
+return
+}
+
+let days=Math.floor(distance/(1000*60*60*24))
+let hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60))
+let mins=Math.floor((distance%(1000*60*60))/(1000*60))
+
+document.getElementById(id).innerText=
+days+"d "+hours+"h "+mins+"m"
+
+},60000)
+
+}
+
+function renderFeatured(){
+
+let soonest=[...events].sort((a,b)=>new Date(a.date)-new Date(b.date))[0]
+
+document.getElementById("featuredEvent").innerHTML=`
+
+<div class="card">
+
+<h3>${soonest.title}</h3>
+
+<p>${soonest.desc}</p>
+
+<p><b>Date:</b> ${soonest.date}</p>
+
+</div>
+
+`
+
+}
+
+function submitEvent(){
+
+let event={
+
+title:eventTitle.value,
+desc:eventDesc.value,
+date:eventDate.value,
+category:eventCategory.value
+
+}
+
+pendingEvents.push(event)
+
+localStorage.setItem("pendingEvents",JSON.stringify(pendingEvents))
+
+alert("Event submitted for approval!")
+
+renderPending()
+
+}
+
+function renderPending(){
+
+let container=document.getElementById("pendingEvents")
+
+container.innerHTML=""
+
+pendingEvents.forEach((e,i)=>{
+
+container.innerHTML+=`
+
+<div class="card">
+
+<b>${e.title}</b>
+
+<br><br>
+
+<button onclick="approveEvent(${i})">Approve</button>
+
+<button onclick="rejectEvent(${i})">Reject</button>
+
+</div>
+
+`
+
+})
+
+}
+
+function approveEvent(i){
+
+events.push(pendingEvents[i])
+
+pendingEvents.splice(i,1)
+
+localStorage.setItem("pendingEvents",JSON.stringify(pendingEvents))
+
+renderEvents()
+renderPending()
+
+}
+
+function rejectEvent(i){
+
+pendingEvents.splice(i,1)
+
+localStorage.setItem("pendingEvents",JSON.stringify(pendingEvents))
+
+renderPending()
+
+}
+
+document.getElementById("search").addEventListener("input",renderEvents)
+document.getElementById("categoryFilter").addEventListener("change",renderEvents)
+
+renderEvents()
+renderPending()
+
+</script>
+
+</body>
+</html>
+```
