@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorials | Femboy Media Corporation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Comfortaa',cursive;
+background:#f8f0ff;
+margin:0;
+color:#333;
+}
+
+header{
+background:#fcd9f0;
+padding:20px;
+text-align:center;
+}
+
+nav a{
+margin:0 15px;
+text-decoration:none;
+color:#6b1cb1;
+font-weight:bold;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+background:linear-gradient(135deg,#ffd6f3,#e8d7ff);
+}
+
+.progress-section{
+max-width:900px;
+margin:auto;
+padding:20px;
+text-align:center;
+}
+
+.progress-bar{
+height:20px;
+background:#eee;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress-fill{
+height:100%;
+background:#ff6fcf;
+width:0%;
+}
+
+.featured{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.best{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.controls{
+max-width:1000px;
+margin:auto;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+padding:20px;
+}
+
+.controls input,.controls select{
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+.tutorials{
+max-width:1200px;
+margin:auto;
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.tag{
+font-size:12px;
+padding:4px 10px;
+border-radius:12px;
+margin-right:5px;
+}
+
+/* difficulty colours */
+
+.beginner{background:#b8ffcc}
+.intermediate{background:#ffe8a3}
+.advanced{background:#ffb8b8}
+
+.rating span{
+cursor:pointer;
+font-size:18px;
+}
+
+.complete-btn{
+margin-top:10px;
+padding:6px 12px;
+border:none;
+border-radius:10px;
+background:#ff6fcf;
+color:white;
+cursor:pointer;
+}
+
+.achievements{
+max-width:900px;
+margin:auto;
+padding:20px;
+background:white;
+border-radius:15px;
+}
+
+.submit-box{
+max-width:800px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:15px;
+}
+
+.submit-box input,.submit-box textarea,.submit-box select{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+footer{
+background:#fcd9f0;
+text-align:center;
+padding:40px;
+margin-top:40px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<img src="your-logo.png" width="200">
+
+<nav>
+<a href="index.html">Home</a>
+<a href="gallery.html">Gallery</a>
+<a href="community.html">Community</a>
+<a href="tutorials.html">Tutorials</a>
+</nav>
+
+</header>
+
+<section class="hero">
+<h1>Creator Tutorials</h1>
+<p>Learn content creation, fashion, cosplay and more.</p>
+</section>
+
+<section class="progress-section">
+
+<h3>Your Learning Progress</h3>
+
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+
+<p id="progressText"></p>
+
+</section>
+
+<section class="featured">
+
+<h2>Featured Tutorials</h2>
+<div id="featuredContainer"></div>
+
+</section>
+
+<section class="best">
+
+<h2>Community Best Tutorials ⭐</h2>
+<div id="bestContainer"></div>
+
+</section>
+
+<div class="controls">
+
+<input type="text" id="search" placeholder="Search tutorials">
+
+<select id="categoryFilter">
+<option value="all">All Categories</option>
+<option>Fashion</option>
+<option>Photography</option>
+<option>Makeup</option>
+<option>Cosplay</option>
+<option>Streaming</option>
+<option>Posing</option>
+<option>Editing</option>
+</select>
+
+<select id="difficultyFilter">
+<option value="all">All Difficulties</option>
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+</select>
+
+</div>
+
+<section class="tutorials" id="tutorialContainer"></section>
+
+<section class="achievements">
+
+<h2>Achievements</h2>
+
+<ul id="achievementList"></ul>
+
+</section>
+
+<section class="submit-box">
+
+<h2>Submit a Tutorial</h2>
+
+<input id="userTitle" placeholder="Title">
+<textarea id="userDesc" placeholder="Description"></textarea>
+
+<select id="userCategory">
+<option>Fashion</option>
+<option>Photography</option>
+<option>Makeup</option>
+<option>Cosplay</option>
+<option>Streaming</option>
+<option>Posing</option>
+<option>Editing</option>
+</select>
+
+<select id="userDifficulty">
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+</select>
+
+<button onclick="submitTutorial()">Submit</button>
+
+</section>
+
+<footer>
+<p>© 2026 Femboy Media Corporation | Part of the Anarchy Broadcasting Authority Network</p>
+</footer>
+
+<script>
+
+let tutorials=[
+
+{title:"Beginner Femboy Fashion Guide",category:"Fashion",difficulty:"Beginner",desc:"Starter outfits"},
+{title:"Skirt Styling Tips",category:"Fashion",difficulty:"Beginner",desc:"Cute outfit combos"},
+{title:"Thigh High Outfit Ideas",category:"Fashion",difficulty:"Beginner",desc:"Style thigh highs"},
+{title:"Makeup Basics",category:"Makeup",difficulty:"Beginner",desc:"Soft makeup guide"},
+{title:"Eyeliner Tutorial",category:"Makeup",difficulty:"Beginner",desc:"Cute eyeliner styles"},
+{title:"Wig Styling Basics",category:"Cosplay",difficulty:"Beginner",desc:"Cosplay wig guide"},
+{title:"Cosplay Starter Setup",category:"Cosplay",difficulty:"Beginner",desc:"Beginner cosplay"},
+{title:"Lighting for Selfies",category:"Photography",difficulty:"Beginner",desc:"Better photos"},
+{title:"Mirror Selfie Tricks",category:"Photography",difficulty:"Beginner",desc:"Improve selfies"},
+{title:"Camera Pose Guide",category:"Posing",difficulty:"Beginner",desc:"Cute poses"},
+{title:"Room Aesthetic Setup",category:"Photography",difficulty:"Intermediate",desc:"Aesthetic rooms"},
+{title:"Photo Editing Basics",category:"Editing",difficulty:"Beginner",desc:"Edit photos"},
+{title:"Advanced Editing Tricks",category:"Editing",difficulty:"Advanced",desc:"Pro editing"},
+{title:"Streaming Setup Guide",category:"Streaming",difficulty:"Intermediate",desc:"Start streaming"},
+{title:"OBS Basics",category:"Streaming",difficulty:"Beginner",desc:"OBS setup"},
+{title:"TikTok Editing Guide",category:"Editing",difficulty:"Intermediate",desc:"Video edits"},
+{title:"Instagram Growth Tips",category:"Photography",difficulty:"Intermediate",desc:"Grow socials"},
+{title:"Cosplay Prop Making",category:"Cosplay",difficulty:"Advanced",desc:"Build props"}
+
+]
+
+function getRating(id){
+return localStorage.getItem("rating_"+id)||0
+}
+
+function rateTutorial(id,stars){
+localStorage.setItem("rating_"+id,stars)
+render()
+}
+
+function saveProgress(id){
+localStorage.setItem("done_"+id,true)
+render()
+}
+
+function isDone(id){
+return localStorage.getItem("done_"+id)
+}
+
+function renderProgress(){
+
+let done=0
+
+tutorials.forEach((t,i)=>{
+if(isDone(i)) done++
+})
+
+let percent=Math.round((done/tutorials.length)*100)
+
+document.getElementById("progressFill").style.width=percent+"%"
+document.getElementById("progressText").innerText=done+" of "+tutorials.length+" tutorials completed"
+
+}
+
+function renderAchievements(){
+
+let done=0
+tutorials.forEach((t,i)=>{if(isDone(i)) done++})
+
+let list=document.getElementById("achievementList")
+list.innerHTML=""
+
+if(done>=1) list.innerHTML+="<li>🌱 First Tutorial Completed</li>"
+if(done>=5) list.innerHTML+="<li>📚 Learning Beginner</li>"
+if(done>=10) list.innerHTML+="<li>🚀 Rising Creator</li>"
+if(done>=15) list.innerHTML+="<li>👑 Tutorial Master</li>"
+
+}
+
+function render(){
+
+renderProgress()
+renderAchievements()
+
+let container=document.getElementById("tutorialContainer")
+container.innerHTML=""
+
+let search=document.getElementById("search").value.toLowerCase()
+let cat=document.getElementById("categoryFilter").value
+let diff=document.getElementById("difficultyFilter").value
+
+tutorials.forEach((t,i)=>{
+
+if(
+t.title.toLowerCase().includes(search)&&
+(cat=="all"||t.category==cat)&&
+(diff=="all"||t.difficulty==diff)
+){
+
+let stars=""
+for(let s=1;s<=5;s++){
+stars+=`<span onclick="rateTutorial(${i},${s})">${s<=getRating(i)?"⭐":"☆"}</span>`
+}
+
+let diffClass=t.difficulty.toLowerCase()
+
+let card=document.createElement("div")
+card.className="card"
+
+card.innerHTML=`
+
+<a href="#"><h3>${t.title}</h3></a>
+
+<p>${t.desc}</p>
+
+<span class="tag ${diffClass}">${t.difficulty}</span>
+<span class="tag">${t.category}</span>
+
+<div class="rating">${stars}</div>
+
+<button class="complete-btn" onclick="saveProgress(${i})">Mark Complete</button>
+
+`
+
+container.appendChild(card)
+
+}
+
+})
+
+renderBest()
+
+}
+
+function renderBest(){
+
+let best=[...tutorials].sort((a,b)=>getRating(tutorials.indexOf(b))-getRating(tutorials.indexOf(a)))
+
+let container=document.getElementById("bestContainer")
+container.innerHTML=""
+
+best.slice(0,3).forEach(t=>{
+container.innerHTML+=`<p>⭐ ${t.title}</p>`
+})
+
+}
+
+function submitTutorial(){
+
+let title=document.getElementById("userTitle").value
+let desc=document.getElementById("userDesc").value
+let cat=document.getElementById("userCategory").value
+let diff=document.getElementById("userDifficulty").value
+
+tutorials.push({title:title,desc:desc,category:cat,difficulty:diff})
+
+render()
+
+}
+
+document.getElementById("search").addEventListener("input",render)
+document.getElementById("categoryFilter").addEventListener("change",render)
+document.getElementById("difficultyFilter").addEventListener("change",render)
+
+render()
+
+</script>
+
+</body>
+</html>
