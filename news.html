@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<title>FMC News</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Quicksand',sans-serif;background:linear-gradient(180deg,#f8d8ea,#efe6ff);color:#2a2139}.logo{font-family:'Fredoka',cursive;font-size:1.5rem;font-weight:700;color:#7b2eff}.logo span{color:#ff69b4}header{position:sticky;top:0;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(0,0,0,.08)}nav a{margin:0 10px;text-decoration:none;color:#5c33cc;font-weight:600}.badge{background:#fff;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.08)}.section{max-width:1200px;margin:auto;padding:40px 20px}.hero{text-align:center;padding:70px 20px}.hero h1,.section h2{font-family:'Fredoka',cursive;color:#6c2ee6}.hero h1{font-size:3rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}.card{background:rgba(255,255,255,.78);padding:24px;border-radius:24px;box-shadow:0 12px 30px rgba(0,0,0,.08)}.card a{text-decoration:none;color:#7b2eff;font-weight:700}.empty{text-align:center}.viewer{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:20px}.panel{background:#fff;max-width:900px;width:100%;max-height:90vh;overflow:auto;border-radius:24px;padding:30px;box-shadow:0 20px 50px rgba(0,0,0,.2)}.close{float:right;border:none;background:#ff69b4;color:#fff;padding:10px 14px;border-radius:14px;cursor:pointer}.article-body img{max-width:100%;border-radius:18px;margin:15px 0}.article-body a{color:#7b2eff}.article-body h1,.article-body h2,.article-body h3{font-family:'Fredoka',cursive;color:#6c2ee6;margin:16px 0 10px}.article-body p{line-height:1.7;margin:12px 0}footer{text-align:center;padding:35px 20px;color:#5a4c7d}@media(max-width:700px){header{flex-direction:column}.hero h1{font-size:2.2rem}}</style>
+</head>
+<body>
+<header><div class='logo'><span>Femboy</span> Media Corporation</div><nav><a href='index.html'>Home</a><a href='about.html'>About</a><a href='news.html'>News</a><a href='index.html#player'>FMC Player</a><a href='index.html#events'>Events</a></nav><div class='badge'>Owned by Magic Plum Company</div></header>
+<section class='hero'><h1>FMC News 📰</h1><p>Latest stories, updates, announcements, and community headlines.</p></section>
+<section class='section'><div id='articles' class='grid'></div></section>
+<div class='viewer' id='viewer'><div class='panel'><button class='close' onclick='closeViewer()'>Close</button><div id='articleContent'></div></div></div>
+<footer>Femboy Media Corporation • A subsidiary of Magic Plum Company</footer>
+<script>
+const articleFiles=['articles/welcome.md','articles/fmc-launch.md'];
+async function loadArticles(){const wrap=document.getElementById('articles');let found=0;for(const file of articleFiles){try{const r=await fetch(file);if(!r.ok) continue;const txt=await r.text();const meta=parseMeta(txt);found++;wrap.innerHTML+=`<div class='card'><h3>${meta.title||'Untitled'}</h3><p>${meta.date||'No Date'}</p><p><a href='#' onclick="openArticle('${file}');return false;">Read Article →</a></p></div>`;}catch(e){}}
+if(!found){wrap.innerHTML=`<div class='card empty'><h3>404 • No Articles Found</h3><p>Fresh stories are coming soon 💖</p></div>`;}}
+function parseMeta(md){const m={};const match=md.match(/^---([\s\S]*?)---/);if(match){match[1].trim().split('\n').forEach(line=>{const parts=line.split(':');m[parts[0].trim()]=parts.slice(1).join(':').trim();});}return m;}
+function markdownToHtml(md){md=md.replace(/^---[\s\S]*?---/,'');md=md.replace(/^### (.*$)/gim,'<h3>$1</h3>');md=md.replace(/^## (.*$)/gim,'<h2>$1</h2>');md=md.replace(/^# (.*$)/gim,'<h1>$1</h1>');md=md.replace(/!\[(.*?)\]\((.*?)\)/gim,"<img alt='$1' src='$2'>");md=md.replace(/\[(.*?)\]\((.*?)\)/gim,"<a href='$2' target='_blank'>$1</a>");md=md.replace(/\n\n/g,'</p><p>');return '<div class="article-body"><p>'+md+'</p></div>';}
+async function openArticle(file){const r=await fetch(file);if(!r.ok)return;const txt=await r.text();const meta=parseMeta(txt);document.getElementById('articleContent').innerHTML=`<h1 style='font-family:Fredoka;color:#6c2ee6'>${meta.title||''}</h1><p>${meta.date||''}</p>${markdownToHtml(txt)}`;document.getElementById('viewer').style.display='flex';location.hash=file.split('/').pop().replace('.md','');}
+function closeViewer(){document.getElementById('viewer').style.display='none';history.replaceState(null,null,' ')}
+loadArticles();
+</script>
+</body></html>
