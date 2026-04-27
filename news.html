@@ -14,7 +14,7 @@
 <div class='viewer' id='viewer'><div class='panel'><button class='close' onclick='closeViewer()'>Close</button><div id='articleContent'></div></div></div>
 <footer>Femboy Media Corporation • A subsidiary of Magic Plum Company</footer>
 <script>
-const articleFiles=['articles/fmclaunch.md'];
+const articleFiles=['/articles/fmclaunch.md'];
 async function loadArticles(){const wrap=document.getElementById('articles');let found=0;for(const file of articleFiles){try{const r=await fetch(file);if(!r.ok) continue;const txt=await r.text();const meta=parseMeta(txt);found++;wrap.innerHTML+=`<div class='card'><h3>${meta.title||'Untitled'}</h3><p>${meta.date||'No Date'}</p><p><a href='#' onclick="openArticle('${file}');return false;">Read Article →</a></p></div>`;}catch(e){}}
 if(!found){wrap.innerHTML=`<div class='card empty'><h3>404 • No Articles Found</h3><p>Fresh stories are coming soon 💖</p></div>`;}}
 function parseMeta(md){const m={};const match=md.match(/^---([\s\S]*?)---/);if(match){match[1].trim().split('\n').forEach(line=>{const parts=line.split(':');m[parts[0].trim()]=parts.slice(1).join(':').trim();});}return m;}
