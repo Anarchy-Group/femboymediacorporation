@@ -7,7 +7,7 @@ tags: launch, updates, community
 image: images/fmc-launch-banner.jpg
 ---
 
-# Welcome to Femboy Media Corporation 💖
+# Welcome to Femboy Media Corporation 
 
 Today marks the official launch of **Femboy Media Corporation**, a new creative media platform built around community, entertainment, and expressive culture.
 
